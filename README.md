@@ -3,8 +3,10 @@ Addon to agentejo/Cockpit that renders layout component previews using component
 
 Please note that only a subset of field types are handled at this time.
 
-## Screenshot
+## Screenshots
 ![image](https://user-images.githubusercontent.com/51078938/114439950-da695500-9bc9-11eb-8305-93188838c778.png)
+
+![image](https://user-images.githubusercontent.com/51078938/114441406-a42cd500-9bcb-11eb-89e8-385872dc87c1.png)
 
 ## Requirements
 * LayoutComponents addon (for custom layout components with options JSON): https://github.com/agentejo/LayoutComponents

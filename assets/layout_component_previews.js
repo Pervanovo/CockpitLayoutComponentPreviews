@@ -11,14 +11,14 @@
         return '<span class="uk-display-inline-block uk-text-truncate">' + App.Utils.stripTags(html) + '</span>';
     }
 
-    function assetPreview(asset, p) {
+    function assetPreview(asset, preview) {
         if (asset.image) {
             var path = asset.path;
             var imageUrl = path.match(/^(https?:|\/\/)/) ? path : encodeURI(ASSETS_URL + path);
             var previewImageUrl = imageUrl;
-            if (p.style && Array.isArray(asset.styles)) {
+            if (preview.style && Array.isArray(asset.styles)) {
                 for (var style of asset.styles) {
-                    if (style.style === p.style && style.path) {
+                    if (style.style === preview.style && style.path) {
                         previewImageUrl = encodeURI(SITE_URL + style.path);
                         break;
                     }
@@ -31,38 +31,38 @@
         }
     }
 
-    function previewComponent(def, component, output) {
+    function previewComponent(componentDefinition, component, output) {
         var componentName = component.component;
         var value = component.settings;
-        if (def.options.preview) {
-            for (var p of def.options.preview) {
-                if (p.field) {
-                    var v = value[p.field];
+        if (Array.isArray(componentDefinition.options.preview)) {
+            for (var preview of componentDefinition.options.preview) {
+                if (preview.field) {
+                    var v = value[preview.field];
                     if (!v) {
                         if (typeof v === "undefined") {
-                            console.warn("Could not find field value " + p.field + " in " + componentName);
+                            console.warn("Could not find field value " + preview.field + " in " + componentName);
                         }
                         continue;
                     }
-                    var fieldDef = false;
-                    for (var f of def.fields) {
-                        if (f.name === p.field) {
-                            fieldDef = f;
+                    var fieldDefinition = false;
+                    for (var f of componentDefinition.fields) {
+                        if (f.name === preview.field) {
+                            fieldDefinition = f;
                             break;
                         }
                     }
-                    if (fieldDef) {
+                    if (fieldDefinition) {
                         // Add output according to field def
-                        if (typeof p.label == "undefined") {
-                            p.label = !p.badge;
+                        if (typeof preview.label == "undefined") {
+                            preview.label = !preview.badge;
                         }
-                        switch (fieldDef.type) {
+                        switch (fieldDefinition.type) {
                             case "boolean":
                                 if (v) {
-                                    if (p.badge) {
-                                        output.push(badge(fieldDef.label));
+                                    if (preview.badge) {
+                                        output.push(badge(fieldDefinition.label));
                                     } else {
-                                        output.push(text(fieldDef.label));
+                                        output.push(text(fieldDefinition.label));
                                     }
                                 }
                                 break;
@@ -70,7 +70,7 @@
                                 if (Array.isArray(v)) {
                                     // multiple collectionlink
                                     for (var val of v) {
-                                        if (p.badge) {
+                                        if (preview.badge) {
                                             output.push(badge(val.display));
                                         } else {
                                             output.push(text(val.display));
@@ -84,17 +84,17 @@
                             case "text":
                             case "number":
                             case "select":
-                                if (p.badge) {
+                                if (preview.badge) {
                                     output.push(badge(v));
-                                } else if (!!p.label) {
-                                    output.push(text(fieldDef.label + ": " + v));
+                                } else if (!!preview.label) {
+                                    output.push(text(fieldDefinition.label + ": " + v));
                                 } else {
                                     output.push(text(v));
                                 }
                                 break;
                             case "asset":
                                 if (v.path) {
-                                    output.push(assetPreview(v, p));
+                                    output.push(assetPreview(v, preview));
                                 }
                                 break;
                             case "wysiwyg":
@@ -102,8 +102,8 @@
                                 break;
                             case "repeater":
                                 for (var item of v) {
-                                    var val = item.value[p.display];
-                                    if (p.badge) {
+                                    var val = item.value[preview.display];
+                                    if (preview.badge) {
                                         output.push(badge(val));
                                     } else {
                                         output.push(text(val));
@@ -115,19 +115,19 @@
                                 break;
                             case "layout":
                                 if (Array.isArray(v)) {
-                                    output.push(text(fieldDef.label + ": " + v.length + " component(s)"));
+                                    output.push(text(fieldDefinition.label + ": " + v.length + " component(s)"));
                                 }
                                 break;
                             default:
-                                console.warn("Unknown field type: " + fieldDef.type);
+                                console.warn("Unknown field type: " + fieldDefinition.type);
                         }
                     } else {
-                        console.warn("Could not find field definition for " + p.field + " in " + componentName);
+                        console.warn("Could not find field definition for " + preview.field + " in " + componentName);
                     }
-                } else if (p.text) {
-                    output.push(text(p.text));
+                } else if (preview.text) {
+                    output.push(text(preview.text));
                 }
-                if (p.newline) {
+                if (preview.newline) {
                     output.push("<br/>");
                 }
             }

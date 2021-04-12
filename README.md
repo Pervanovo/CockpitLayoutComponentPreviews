@@ -1,5 +1,5 @@
 # CockpitLayoutComponentPreviews
-Addon to agentejo/Cockpit that renders layout component previews using component options.
+Addon to agentejo/Cockpit that renders layout component previews using component options that can be specified using https://github.com/agentejo/LayoutComponents
 
 ![image](https://user-images.githubusercontent.com/51078938/114439950-da695500-9bc9-11eb-8305-93188838c778.png)
 

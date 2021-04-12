@@ -10,6 +10,9 @@ Please note that only a subset of field types are handled at this time.
 * LayoutComponents addon (for custom layout components with options JSON): https://github.com/agentejo/LayoutComponents
 * Relies on the custom event trigger: `field.layout.component.preview` (https://github.com/agentejo/cockpit/pull/1349)
 
+## Installation
+Clone this repo into addon/CockpitLayoutComponentPreviews in your cockpit root directory.
+
 ## Usage
 Add a ´preview´ key with an array of preview objects to the layout component options JSON.
 

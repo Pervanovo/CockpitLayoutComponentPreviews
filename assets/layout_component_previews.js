@@ -31,7 +31,8 @@
         }
     }
 
-    function previewComponent(componentDefinition, component, output) {
+    function previewComponent(componentDefinition, component) {
+        var output = [];
         var componentName = component.component;
         var value = component.settings;
         if (Array.isArray(componentDefinition.options.preview)) {
@@ -134,9 +135,13 @@
         } else {
             console.log("missing layout component preview", componentName, value);
         }
+        return output;
     }
 
     App.on("field.layout.component.preview", function (trigger) {
-        previewComponent(trigger.params.def, trigger.params.component, trigger.params.output);
+        var output = previewComponent(trigger.params.definition, trigger.params.component);
+        if (output.length > 0) {
+            trigger.params.output = output.join('');
+        }
     });
 })();
